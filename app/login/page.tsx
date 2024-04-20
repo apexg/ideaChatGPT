@@ -34,43 +34,45 @@ export default async function login(
     return redirect("/");
   }
   //如果是企业微信app过来的
+  if (from)
+  {
   const redirectUrl = encodeURIComponent(`${process.env.NEXT_PUBLIC_AUTH_WECHAT_REDIRECT_URI}/`);
   // const url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${process.env.NEXT_PUBLIC_AUTH_WECHAT_APP_ID}&redirect_uri=${redirectUrl}&response_type=code&scope=snsapi_base&state=redirect#wechat_redirect`;
   const url = `https://login.work.weixin.qq.com/wwlogin/sso/login?login_type=CorpApp&appid=${process.env.NEXT_PUBLIC_AUTH_WECHAT_APP_ID}&agentid=${process.env.NEXT_PUBLIC_AUTH_WECHAT_AGENT_ID}&redirect_uri=${redirectUrl}&state=redirect`;
   // console.log(url)
   redirect(url);
+  }
+
+    // let wwLogin: any;
+    // const wwLoginOptions: any = {
+    //   el: "#ww_login",
+    //   params: {
+    //     login_type: "CorpApp",
+    //     appid: process.env.NEXT_PUBLIC_AUTH_WECHAT_APP_ID, //"ww3d958fa2c53f1e60",
+    //     agentid: process.env.NEXT_PUBLIC_AUTH_WECHAT_AGENT_ID, //"1000047",
+    //     redirect_uri: process.env.NEXT_PUBLIC_AUTH_WECHAT_REDIRECT_URI, //"https://ai.idea-group.cn:7850",
+    //     state: "redirect",
+    //     panel_size: "small",
+    //     redirect_type: "callback",
+    //   },
+    //   onCheckWeComLogin(data: any) {
+    //     console.log(data.isWeComLogin);
+    //   },
+    //   async onLoginSuccess(data: any) {
+    //     wwLogin.unmount();
+    //     // console.log("微信code",data.code)
+    //     const user = await loadUserInfo(data.code);
+    //     // console.log("user",user)
+    //     redirect("/");
+    //   },
+    //   onLoginFail(err: any) {
+    //     console.log(err);
+    //     //   !!wwLogin && wwLogin.unmount();
+    //   },
+    // };
 
 
-    let wwLogin: any;
-    const wwLoginOptions: any = {
-      el: "#ww_login",
-      params: {
-        login_type: "CorpApp",
-        appid: process.env.NEXT_PUBLIC_AUTH_WECHAT_APP_ID, //"ww3d958fa2c53f1e60",
-        agentid: process.env.NEXT_PUBLIC_AUTH_WECHAT_AGENT_ID, //"1000047",
-        redirect_uri: process.env.NEXT_PUBLIC_AUTH_WECHAT_REDIRECT_URI, //"https://ai.idea-group.cn:7850",
-        state: "redirect",
-        panel_size: "small",
-        redirect_type: "callback",
-      },
-      onCheckWeComLogin(data: any) {
-        console.log(data.isWeComLogin);
-      },
-      async onLoginSuccess(data: any) {
-        wwLogin.unmount();
-        // console.log("微信code",data.code)
-        const user = await loadUserInfo(data.code);
-        // console.log("user",user)
-        redirect("/");
-      },
-      onLoginFail(err: any) {
-        console.log(err);
-        //   !!wwLogin && wwLogin.unmount();
-      },
-    };
-
-
-    wwLogin = ww.createWWLoginPanel(wwLoginOptions);
+    // wwLogin = ww.createWWLoginPanel(wwLoginOptions);
 
   
   return <div id="ww_login" />;
