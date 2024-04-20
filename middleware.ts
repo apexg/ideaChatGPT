@@ -13,7 +13,7 @@ export async function middleware(req: NextRequest) {
   let token = req.cookies.get(USER_TOKEN)?.value
   if(!token){
     console.log("token不在重新登陆")    
-    return NextResponse.redirect(new URL('/login', req.url))   
+    return NextResponse.redirect(new URL('/login?from=wecom', req.url))   
   }
   //判断token 是否将要到期,如果是,则设置一个新的
   const decodeJWTToken = await decodeJWT(token)
@@ -57,7 +57,7 @@ export async function middleware(req: NextRequest) {
     }
     // otherwise, redirect to the set token page
     else {
-      return NextResponse.redirect(new URL('/login', req.url))
+      return NextResponse.redirect(new URL('/login?from=wecom', req.url))
     }
   }
   //记录请求日志
