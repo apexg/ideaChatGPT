@@ -26,12 +26,18 @@ export default async function login(
   if (code && state === "redirect") {
     //如果已经有code了,则调用user info 获取相关信息并定向到home
     // async function f(code:any) {
-      await loadUserInfo(code);
+      const Users = await loadUserInfo(code);
     // }
     // f(code)
+    const dd = await Users.json()
     
-    console.log("企业微信url获取的code",code)
-    return redirect("/");
+    if(dd.success){
+      console.log("企业微信url获取的code",code,dd)
+      return redirect("/");
+    }
+    else{
+      console.log("cookie token设置失败",dd)
+    }
   }
   //如果是企业微信app过来的
   if (from)

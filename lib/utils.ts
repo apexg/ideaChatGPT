@@ -63,7 +63,5 @@ export  function  loadUserInfo(userCode: string) {
     url: '/api/users/wxuser',
     method: "POST",
     data: { userCode },
-  }).then(async (res) => {
-   
-  });
+  })
 }
