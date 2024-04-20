@@ -58,10 +58,27 @@ export async function request(options: {
 }
 
 // 根据企业微信code获取用户信息
-export  function  loadUserInfo(userCode: string) {
-  return request({
-    url: '/api/users/wxuser',
-    method: "POST",
-    data: { userCode },
-  })
+export async function  loadUserInfo(userCode: string) {
+  const base_url= process.env.NEXT_PUBLIC_AUTH_WECHAT_REDIRECT_URI
+  // 定义请求的 URL
+  const url = `${base_url}/api/users/wxuser`;
+  // 准备请求的数据
+  const data = {
+    userCode
+  };
+  // console.log("请求data",data)
+  // 配置 Fetch 请求
+  const options = {
+    method: 'POST',  // 指定请求方法为 POST
+    headers: {
+      'Content-Type': 'application/json'  // 指定请求头为 JSON 格式
+    },
+    body: JSON.stringify(data)  // 将数据转换为 JSON 字符串
+  };
+
+  // 发起 Fetch 请求
+  return await fetch(url, options)
+  // console.log(await r.json())
+
+  
 }
