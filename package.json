@@ -3,9 +3,9 @@
   "private": false,
   "license": "mit",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3985",
     "build": "cross-env BUILD_MODE=standalone next build",
-    "start": "next start",
+    "start": "next start -p 3985",
     "lint": "next lint",
     "export": "cross-env BUILD_MODE=export BUILD_APP=1 next build",
     "export:dev": "cross-env BUILD_MODE=export BUILD_APP=1 next dev",
@@ -26,8 +26,11 @@
     "fuse.js": "^7.0.0",
     "html-to-image": "^1.11.11",
     "mermaid": "^10.6.1",
+    "@wecom/jssdk": "^1.4.5",
+    "jose": "^4.13.1",
+    "mongoose": "^7.4.2",
+    "next": "13.5.6",
     "nanoid": "^5.0.3",
-    "next": "^14.1.4",
     "node-fetch": "^3.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -42,6 +45,8 @@
     "spark-md5": "^3.0.2",
     "use-debounce": "^9.0.4",
     "zustand": "^4.3.8"
+    
+
   },
   "devDependencies": {
     "@tauri-apps/cli": "1.5.11",

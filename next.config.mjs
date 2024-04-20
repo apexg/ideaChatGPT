@@ -33,6 +33,7 @@ const nextConfig = {
   experimental: {
     forceSwcTransforms: true,
   },
+  reactStrictMode: false
 };
 
 const CorsHeaders = [
