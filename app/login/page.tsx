@@ -24,8 +24,13 @@ export default async function login(
   console.log("state",state)
   console.log("code",code)
   
-  if (code){
+  async function tmp(code:any) {
     const user = await loadUserInfo(code);
+  }
+  if (code){   
+    useEffect( ()=> {
+      tmp(code)
+    },[code])
     router.push("/");
   }else  {
   let wwLogin: any;
