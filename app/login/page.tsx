@@ -32,12 +32,18 @@ export default async function login(
     // if(token.token){
     //   localStorage.setItem(USER_TOKEN, token.token);
     // }
+    return token
   }
   if (code){   
-    useEffect( ()=> {
-      tmp(code)
-    },[code])
-    router.push("/");
+    const token= await tmp(code)
+    //因为一个code 只能用一次,如果可以正常返回token ,说明是首次使用code并成功了,这时候跳转到主页聊天开始,
+    //否则说明是再次向后台请求,这个时候,需要重新扫码产生新的code,所以跳转到/login
+    if(token.success){
+      router.push("/");    
+    }else{
+      router.push("/login");
+    }    
+    
   }else  {
   let wwLogin: any;
     const wwLoginOptions: any = {
