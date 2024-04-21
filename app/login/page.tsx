@@ -7,22 +7,22 @@ import { useRouter } from 'next/navigation'
 // import { useSearchParams } from "next/navigation";
 // import querystring from "querystring";
 export default async function login(
-  // {
-  //   params,
-  //   searchParams,
-  // }: {
-  //   params: { slug: string };
-  //   searchParams?: { [key: string]: string | undefined };
-  // }
+  {
+    params,
+    searchParams,
+  }: {
+    params: { slug: string };
+    searchParams?: { [key: string]: string | undefined };
+  }
 ) {
   const router = useRouter();
   // const searchParams = useSearchParams();
-  // const code = searchParams?.code;
-  // const state = searchParams?.state
-  // const from = searchParams?.from
-  // console.log("from",from)
-  // console.log("state",state)
-  // console.log("code",code)
+  const code = searchParams?.code;
+  const state = searchParams?.state
+  const from = searchParams?.from
+  console.log("from",from)
+  console.log("state",state)
+  console.log("code",code)
   
   
   // if (code && state === "redirect") {
@@ -31,27 +31,30 @@ export default async function login(
   //     const Users = await loadUserInfo(code);
   //   // }
   //   // f(code)
-  //   const dd = await Users.json()
+  //   // const dd = await Users.json()
     
-  //   if(dd.success){
-  //     console.log("企业微信url获取的code",code,dd)
-  //     return redirect("/");
-  //   }
-  //   else{
-  //     console.log("cookie token设置失败",dd)
-  //   }
+  //   // if(dd.success){
+  //   //   console.log("企业微信url获取的code",code,dd)
+  //   //   return redirect("/");
+  //   // }
+  //   // else{
+  //   //   console.log("cookie token设置失败",dd)
+  //   // }
   // }
   //如果是企业微信app过来的
   // if (!code)
-  // {
-  // const redirectUrl = encodeURIComponent(`${process.env.NEXT_PUBLIC_AUTH_WECHAT_REDIRECT_URI}/login`);
+  // // {
+  // const redirectUrl = encodeURIComponent(`${process.env.NEXT_PUBLIC_AUTH_WECHAT_REDIRECT_URI}/`);
   // // const url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${process.env.NEXT_PUBLIC_AUTH_WECHAT_APP_ID}&redirect_uri=${redirectUrl}&response_type=code&scope=snsapi_base&state=redirect#wechat_redirect`;
   // const url = `https://login.work.weixin.qq.com/wwlogin/sso/login?login_type=CorpApp&appid=${process.env.NEXT_PUBLIC_AUTH_WECHAT_APP_ID}&agentid=${process.env.NEXT_PUBLIC_AUTH_WECHAT_AGENT_ID}&redirect_uri=${redirectUrl}&state=redirect`;
   // // console.log(url)
   // redirect(url);
   // }
-
-    let wwLogin: any;
+  // redirect(`${process.env.NEXT_PUBLIC_AUTH_WECHAT_REDIRECT_URI}/`);
+  if (code){
+    const user = await loadUserInfo(code);
+  }else  {
+  let wwLogin: any;
     const wwLoginOptions: any = {
       el: "#ww_login",
       params: {
@@ -84,7 +87,7 @@ export default async function login(
     },[])
     
     
-
+  }
   
   return <div id="ww_login" />;
 }

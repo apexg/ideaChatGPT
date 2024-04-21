@@ -1,21 +1,49 @@
 import { type NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { createJWT ,authJWT,setCookie,decodeJWT} from '@/lib/auth'
-
-import { USER_TOKEN } from '@/lib/constants'
+import { loadUserInfo } from "@/lib/utils";
+import { USER_TOKEN,MAX_AGE } from '@/lib/constants'
 export const config = {
-  matcher: [ '/api/openai/:path*' ,'/','/login'],
+  matcher: [ '/api/openai/:path*' ,'/'],
 }
 const base_url= process.env.NEXT_PUBLIC_AUTH_WECHAT_REDIRECT_URI
 export async function middleware(req: NextRequest) {
   // validate the user is authenticated
   // console.log("middleware.req",req)
   let token = req.cookies.get(USER_TOKEN)?.value
-  //如果是/login 且没有登陆过
-  if(req.nextUrl.pathname.startsWith('/login') && !token){
+
+  console.log("cookie token:",token)
+  // const code = req.nextUrl.searchParams.get('code')
+  // console.log("middleware code",code )
+  // console.log("req.nextUrl.pathname",req.nextUrl.pathname)
+  
+  //如果有code,说明是登录过来的,则设置token
+  // if(req.nextUrl.pathname==='/' &&code)
+  // {
+  //   const r=await loadUserInfo(code);
+  //   const token = await r.json()
+
+  //   console.log('token设置成功',token.token)
+  //   // Given incoming request /home
+  //   let response = NextResponse.next()
+  //   // Set a cookie to hide the banner
+  //   // response.cookies.set('show-banner', 'false')
+
+  //   response.cookies.set(USER_TOKEN, token, {
+  //     httpOnly: true,
+  //     maxAge: MAX_AGE, // 2 hours in seconds
+  //   })
+  //   // Response will have a `Set-Cookie:show-banner=false;path=/home` header
+  //   // return response
+
+  //   // return NextResponse.redirect(new URL('/', req.url)) 
+  // }
+  
+  // //如果是/login 且没有登陆过
+  // if(req.nextUrl.pathname.startsWith('/login') && !token){
     
-  }else
-  {   
+  // }else
+  // {   
     if(!token){
       console.log("token不在重新登陆")    
       if (req.method==='POST'){        
@@ -26,7 +54,9 @@ export async function middleware(req: NextRequest) {
           },
         })          
       }
+      // console.log("req.url",req.url)
       return NextResponse.redirect(new URL('/login', req.url))   
+      
     }
     //判断token 是否将要到期,如果是,则设置一个新的
     const decodeJWTToken = await decodeJWT(token)
@@ -105,5 +135,5 @@ export async function middleware(req: NextRequest) {
     const res= await setCookie(response,token)
     return res
 
-  }
+  // }
 }
