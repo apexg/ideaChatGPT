@@ -10,7 +10,8 @@ const base_url= process.env.NEXT_PUBLIC_AUTH_WECHAT_REDIRECT_URI
 export async function middleware(req: NextRequest) {
   // validate the user is authenticated
   // console.log("middleware.req",req)
-  let token = req.cookies.get(USER_TOKEN)?.value
+  // let token = req.cookies.get(USER_TOKEN)?.value
+  let  token = localStorage.getItem(USER_TOKEN);
 
   console.log("cookie token:",token)
   
@@ -42,7 +43,8 @@ export async function middleware(req: NextRequest) {
       if(!dd.success) {
         //清除token        
         let response = NextResponse.next()
-        response.cookies.delete(USER_TOKEN);
+        // response.cookies.delete(USER_TOKEN);
+        localStorage.removeItem(USER_TOKEN);
         return response
         
         // // console.log("登陆不成功",req)      

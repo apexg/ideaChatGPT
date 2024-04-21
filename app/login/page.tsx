@@ -4,6 +4,7 @@ import { loadUserInfo } from "@/lib/utils";
 // import { redirect } from 'next/navigation'
 import {  useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { USER_TOKEN,MAX_AGE } from '@/lib/constants'
 // import { useSearchParams } from "next/navigation";
 // import querystring from "querystring";
 export default async function login(
@@ -26,6 +27,10 @@ export default async function login(
   
   async function tmp(code:any) {
     const user = await loadUserInfo(code);
+    const token = await user.json()
+    if(token.token){
+      localStorage.setItem(USER_TOKEN, token.token);
+    }
   }
   if (code){   
     useEffect( ()=> {
@@ -51,7 +56,7 @@ export default async function login(
       async onLoginSuccess(data: any) {
         wwLogin.unmount();
         // console.log("微信code",data.code)
-        const user = await loadUserInfo(data.code);
+        tmp(data.code);
         // console.log("user",user)
         router.push("/");
       },
