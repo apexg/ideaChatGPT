@@ -72,6 +72,7 @@ export const setCookie =(res: NextResponse, token: string) =>{
 /* clear cookie */
 export const clearCookie = (res: NextResponse) => {
   res.cookies.set(USER_TOKEN, '', { httpOnly: true, maxAge: 0 })
+  console.log("token清除成功!")
   return res
 };
 
