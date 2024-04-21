@@ -65,6 +65,8 @@ export const setCookie =(res: NextResponse, token: string) =>{
   res.cookies.set(USER_TOKEN, token, {
     httpOnly: true,
     maxAge: MAX_AGE, // 2 hours in seconds
+    sameSite:"none",
+    secure:true
   })
   return res
 }

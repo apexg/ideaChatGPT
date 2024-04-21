@@ -28,9 +28,9 @@ export default async function login(
   async function tmp(code:any) {
     const user = await loadUserInfo(code);
     const token = await user.json()
-    if(token.token){
-      localStorage.setItem(USER_TOKEN, token.token);
-    }
+    // if(token.token){
+    //   localStorage.setItem(USER_TOKEN, token.token);
+    // }
   }
   if (code){   
     useEffect( ()=> {
