@@ -65,9 +65,9 @@ export async function POST(req: NextRequest) {
           corpId: corpId!,
           userId: user.username,
         });
-        await setCookie(jsonResponse(200, { success: true }), token);
+        return await setCookie(jsonResponse(200, { success: true,token }), token);
 
-        return NextResponse.json({token:token}, { status: 200 });
+        
       }
     }
   }
