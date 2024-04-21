@@ -7,11 +7,11 @@ export const userCollectionName = 'users';
 const UserSchema =new Schema({
   corpid: {
     type: String,  
-    unique:true 
+    
   },
   username: {
     type: String,  
-    unique:true 
+    
   },
   alias_name: {    
     type: String,  
