@@ -1,10 +1,10 @@
 'use client'
 import * as ww from "@wecom/jssdk";
-import { loadUserInfo } from "@/lib/utils";
+// import { loadUserInfo } from "@/lib/utils";
 // import { redirect } from 'next/navigation'
 import {  useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { USER_TOKEN,MAX_AGE } from '@/lib/constants'
+// import { USER_TOKEN,MAX_AGE } from '@/lib/constants'
 // import { useSearchParams } from "next/navigation";
 // import querystring from "querystring";
 export default async function login(
@@ -18,22 +18,22 @@ export default async function login(
 ) {
   const router = useRouter();
   // const searchParams = useSearchParams();
-  const code = searchParams?.code;
-  const state = searchParams?.state
-  const from = searchParams?.from
-  console.log("from",from)
-  console.log("state",state)
-  console.log("code",code)
+  // const code = searchParams?.code;
+  // const state = searchParams?.state
+  // const from = searchParams?.from
+  // console.log("from",from)
+  // console.log("state",state)
+  // console.log("code",code)
   
-  async function tmp(code:any) {
-    const r= await loadUserInfo(code)
-    if(r.status===200) {
-      const r1= await r.json()
-      const token = r1.token
-      return token
-    }  
-    return null
-  }
+  // async function tmp(code:any) {
+  //   const r= await loadUserInfo(code)
+  //   if(r.status===200) {
+  //     const r1= await r.json()
+  //     const token = r1.token
+  //     return token
+  //   }  
+  //   return null
+  // }
 
   let wwLogin: any;
     const wwLoginOptions: any = {
@@ -48,7 +48,7 @@ export default async function login(
         redirect_type: "callback",
       },
       onCheckWeComLogin(data: any) {
-        console.log(data.isWeComLogin);
+        // console.log(data.isWeComLogin);
       },
       async onLoginSuccess(data: any) {
         wwLogin.unmount();

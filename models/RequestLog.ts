@@ -20,7 +20,9 @@ const RequestSchema =new Schema({
 });
 
 try {  
-  RequestSchema.index({ username: 1, request_time: 1 }, { background: true });
+  RequestSchema.index({ username: -1 }, { background: true });
+  RequestSchema.index({ request_time: -1 }, { background: true });
+  RequestSchema.index({ corpid: -1 }, { background: true });
 } catch (error) {
   console.log(error);
 }

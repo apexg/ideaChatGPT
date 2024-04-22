@@ -3,7 +3,7 @@ import { request } from "@/lib/utils";
 
 import dbConnect from "@/lib/dbConnect";
 import { MongoUser } from "@/models/User";
-import { createJWT, setCookie } from "@/lib/auth";
+import { createJWT } from "@/lib/auth";
 import { jsonResponse } from "@/lib/utils";
 
 export async function POST(req: NextRequest) {
@@ -52,9 +52,11 @@ export async function POST(req: NextRequest) {
           alias_name: res.name,
           mobile: "",
           email: "",
+          userCode:userCode,
   };
 
   //保持到数据库
+  //根据username 唯一更新
   const tmp = await MongoUser.findOneAndUpdate(
     { username: user.username },
     { $set: user },
@@ -66,9 +68,10 @@ export async function POST(req: NextRequest) {
         // console.log("保存用户到数据库",user)
   //设置token
   const token = await createJWT({
-          corpId: corpId!,
-          userId: user.username,
-  });
+    corpId:user.corpid, 
+    userId:user.username,
+    userCode:user.userCode,
+    alias_name:user.alias_name});
   
   if(!token)
   {

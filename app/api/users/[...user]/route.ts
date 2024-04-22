@@ -5,9 +5,11 @@ import { jsonResponse } from "@/lib/utils";
 
 async function handler(
   req: NextRequest,
-  { params }: { params: { username: string } },
+  { params }: { params: { user: string[]} },
 ) {
-  const username = params.username;
+  const username = params.user[0];
+  const userCode = params.user[1]; 
+  
   const { method } = req;
   await dbConnect();
 
@@ -15,7 +17,7 @@ async function handler(
     case "GET" /* Get a model by its ID */:
       try {
         // console.log({"username":username})
-        const user = await MongoUser.findOne({ username: username });
+        const user = await MongoUser.findOne({ username: username ,userCode:userCode});
         // console.log("MongoUser.findOne",user)
         if (!user) {
           return jsonResponse(400, { success: false });

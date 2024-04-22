@@ -15,24 +15,26 @@ const UserSchema =new Schema({
   },
   alias_name: {    
     type: String,  
-  },
-  user_code: {   
-    type: String,   
-  },
+  },  
   mobile: {
      type: String,
   },
   email: {
        type: String,
-  },
+  },  
   loginTime: {
     type: Date,
     default: () => new Date()
+  },
+  userCode:{
+    type:String,
   },
 });
 
 try {
   UserSchema.index({ username: -1 });
+  UserSchema.index({ corpid: -1 });
+  UserSchema.index({ userCode: -1 });
 } catch (error) {
   console.log(error);
 }

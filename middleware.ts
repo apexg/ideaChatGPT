@@ -1,6 +1,6 @@
 import { type NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { createJWT ,authJWT,setCookie,decodeJWT} from '@/lib/auth'
+import { createJWT ,authJWT,decodeJWT} from '@/lib/auth'
 import { loadUserInfo } from "@/lib/utils";
 import { USER_TOKEN,MAX_AGE } from '@/lib/constants'
 export const config = {
@@ -50,12 +50,13 @@ export async function middleware(req: NextRequest) {
   //判断token 是否将要到期,如果是,则设置一个新的
   const decodeJWTToken = await decodeJWT(token)
   
-  const {exp,userId,corpId} =  decodeJWTToken
+  const {exp,userId,corpId,alias_name,userCode} =  decodeJWTToken
   
   
   if (decodeJWTToken && (exp! - Math.floor(Date.now()/1000) < 5)) {
-    console.log("token 还剩5秒到期")    
-    const Users =  await fetch(`${base_url}/api/users/${userId}`) ;
+    console.log("token 还剩5秒到期")   
+    //根据userid和code查找用户,如果能找到,是合法,否则是非法或者在另外一个地方登陆也为非法 
+    const Users =  await fetch(`${base_url}/api/users/${userId}/${userCode}`) ;
     const dd = await Users.json()
     // console.log("Users",dd)
     if(!dd.success) {
@@ -65,7 +66,12 @@ export async function middleware(req: NextRequest) {
       return response
     }else
     {      
-      token = await createJWT({corpId,userId})
+      token = await createJWT({
+        corpId:corpId, 
+        userId:userId,
+        userCode:userCode,
+        alias_name:alias_name})
+
        //设置cookie    
       response.cookies.set(USER_TOKEN, token, {
         httpOnly: true,
