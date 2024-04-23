@@ -4,7 +4,7 @@ import { createJWT ,authJWT,decodeJWT} from '@/lib/auth'
 import { loadUserInfo } from "@/lib/utils";
 import { USER_TOKEN,MAX_AGE } from '@/lib/constants'
 export const config = {
-  matcher: [ '/api/openai/:path*' ,'/'],
+  matcher: [ '/api/openai/:path*' ,'/','/api/users/stat'],
 }
 const base_url= process.env.NEXT_PUBLIC_AUTH_WECHAT_REDIRECT_URI
 export async function middleware(req: NextRequest) {

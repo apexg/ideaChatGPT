@@ -52,7 +52,7 @@ db.requestlogs.aggregate([
         }
     },
     {
-        $sort: { count: -1 } // 按照访问次数降序排列
+        $sort: { count: -1,_id:1 } // 按照访问次数降序排列
     },
     {
         $project: {

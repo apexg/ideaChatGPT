@@ -406,6 +406,20 @@ const tw = {
   },
   Plugin: { Name: "外掛" },
   FineTuned: { Sysmessage: "你是一個助手" },
+  Stat:{
+    Title:"在线统计",
+    StatFilterLabel: "最近",
+    StatFilterMinute: "分钟",
+    StatFilterHour: "小时",
+    StatFilterDay: "天",
+    StatNameColName: "姓名",
+    StatMsgCountColName: "提问数量",
+    StatAskTimeColName: "最新提问时间",
+    StatTotalColName: "合计",
+    OnlineCount: (count: number) => `${count} 人在线`,
+    MsgCount: (count: number) => `${count} 次提问`,
+    No: "序号",
+  },
   Mask: {
     Name: "角色範本",
     Page: {

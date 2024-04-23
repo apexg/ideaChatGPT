@@ -415,6 +415,20 @@ const en: LocaleType = {
   FineTuned: {
     Sysmessage: "You are an assistant that",
   },
+  Stat:{
+    Title:"Online Statistics",
+    StatFilterLabel: "Recent",
+    StatFilterMinute: "Minutes",
+    StatFilterHour: "Hours",
+    StatFilterDay: "Days",
+    StatNameColName: "Name",
+    StatMsgCountColName: "Question Count",
+    StatAskTimeColName: "Latest Question Time",
+    StatTotalColName: "Total",
+    OnlineCount: (count: number) => `${count} people online`,
+    MsgCount: (count: number) => `${count} questions asked`,
+    No: "Number",
+  },
   Mask: {
     Name: "Mask",
     Page: {

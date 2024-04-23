@@ -56,6 +56,10 @@ const MaskPage = dynamic(async () => (await import("./mask")).MaskPage, {
   loading: () => <Loading noLogo />,
 });
 
+const Stat = dynamic(async () => (await import("./stat")).Stat, {
+  loading: () => <Loading noLogo />,
+});
+
 export function useSwitchTheme() {
   const config = useAppConfig();
 
@@ -140,8 +144,7 @@ function Screen() {
     <div
       className={
         styles.container +
-        ` ${shouldTightBorder ? styles["tight-container"] : styles.container} ${
-          getLang() === "ar" ? styles["rtl-screen"] : ""
+        ` ${shouldTightBorder ? styles["tight-container"] : styles.container} 
         }`
       }
     >
@@ -160,6 +163,7 @@ function Screen() {
               <Route path={Path.Masks} element={<MaskPage />} />
               <Route path={Path.Chat} element={<Chat />} />
               <Route path={Path.Settings} element={<Settings />} />
+              <Route path={Path.Stat} element={<Stat />} />
             </Routes>
           </div>
         </>
