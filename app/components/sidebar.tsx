@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef, useMemo,useState } from "react";
 
 import styles from "./home.module.scss";
 
@@ -12,8 +12,11 @@ import DeleteIcon from "../icons/delete.svg";
 import MaskIcon from "../icons/mask.svg";
 import PluginIcon from "../icons/plugin.svg";
 import DragIcon from "../icons/drag.svg";
+import UserIcon from "../icons/head.svg";
 
 import Locale from "../locales";
+import Cookies from 'js-cookie'
+import { decodeJwt } from 'jose'
 
 import { useAppConfig, useChatStore } from "../store";
 
@@ -128,9 +131,17 @@ function useDragSideBar() {
   };
 }
 
-export function SideBar(props: { className?: string }) {
+export  function SideBar(props: { className?: string }) {
   const chatStore = useChatStore();
-
+  // console.log("Cookies.get('idea-token') ",Cookies.get('idea-token') )
+  
+  interface UserData {
+    username: string;    
+  }
+  const [username, setUsername] = useState<string>('');
+   
+  
+ 
   // drag side bar
   const { onDragStart, shouldNarrow } = useDragSideBar();
   const navigate = useNavigate();
@@ -142,7 +153,36 @@ export function SideBar(props: { className?: string }) {
   );
 
   useHotKey();
+  
 
+  //增加的代码
+  const Admin =process.env.NEXT_PUBLIC_Admin
+  type UserJwtPayload ={
+    jti: string;
+    iat: number;
+    exp: number;
+    userId:string;
+    corpId:string;
+    userCode:string;
+    alias_name:string;
+  }
+
+  async function decodeToken(){    
+    
+    const decodeJWTToken = await  decodeJwt(Cookies.get('idea-token')!) as UserJwtPayload
+    
+    console.log("decodeJWTToken.alias_name",decodeJWTToken.alias_name)
+ 
+    setUsername(decodeJWTToken.alias_name);  
+
+  }
+
+  useEffect(() => {
+    decodeToken()       
+  }, []);
+  //增加的代码结束
+   
+  
   return (
     <div
       className={`${styles.sidebar} ${props.className} ${
@@ -214,10 +254,17 @@ export function SideBar(props: { className?: string }) {
               <IconButton icon={<SettingsIcon />} shadow />
             </Link>
           </div>
-          <div className={styles["sidebar-action"]}>
+          {Admin!.includes(username) && <div className={styles["sidebar-action"]}>
             <Link to={Path.Stat}>
               <IconButton icon={<DragIcon />} shadow />
             </Link>
+          </div>
+          }
+          <div className={styles["sidebar-action"]}>
+            <IconButton
+              icon={<UserIcon />}
+              text={username}
+            />
           </div>
           {/* <div className={styles["sidebar-action"]}>
             <a href={REPO_URL} target="_blank" rel="noopener noreferrer">

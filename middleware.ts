@@ -3,12 +3,13 @@ import { NextResponse } from 'next/server'
 import { createJWT ,authJWT,decodeJWT} from '@/lib/auth'
 import { loadUserInfo } from "@/lib/utils";
 import { USER_TOKEN,MAX_AGE } from '@/lib/constants'
+// import {useSystemStore} from '@/app/store/useSystemStore'
 export const config = {
   matcher: [ '/api/openai/:path*' ,'/','/api/users/stat'],
 }
 const base_url= process.env.NEXT_PUBLIC_AUTH_WECHAT_REDIRECT_URI
 export async function middleware(req: NextRequest) {
-
+  // const { setLoginStore } = useSystemStore();
   const code = req.nextUrl.searchParams.get('code')
   // const state = req.nextUrl.searchParams.get('state')  
   // validate the user is authenticated
@@ -26,7 +27,7 @@ export async function middleware(req: NextRequest) {
   if (token){
     //设置cookie    
     response.cookies.set(USER_TOKEN, token, {
-      httpOnly: true,
+      // httpOnly: true,
       maxAge: MAX_AGE, // 2 hours in seconds     
     })
   }
@@ -50,8 +51,27 @@ export async function middleware(req: NextRequest) {
   //判断token 是否将要到期,如果是,则设置一个新的
   const decodeJWTToken = await decodeJWT(token)
   
-  const {exp,userId,corpId,alias_name,userCode} =  decodeJWTToken
+  type UserJwtPayload ={
+    jti: string;
+    iat: number;
+    exp: number;
+    userId:string;
+    corpId:string;
+    userCode:string;
+    alias_name:string;
+  }
+  const {exp,userId,corpId,alias_name,userCode} = <UserJwtPayload> decodeJWTToken
   
+  // console.log("{exp,userId,corpId,alias_name,userCode}",{exp,userId,corpId,alias_name,userCode})
+  //设置zustant
+  // setLoginStore({
+  //   corpid: corpId,
+  //   username: userId,
+  //   alias_name: alias_name,  
+  //   mobile: '',
+  //   email: '',  
+  //   userCode:userCode
+  // })
   
   if (decodeJWTToken && (exp! - Math.floor(Date.now()/1000) < 5)) {
     console.log("token 还剩5秒到期")   
@@ -74,7 +94,7 @@ export async function middleware(req: NextRequest) {
 
        //设置cookie    
       response.cookies.set(USER_TOKEN, token, {
-        httpOnly: true,
+        // httpOnly: true,
         maxAge: MAX_AGE, // 2 hours in seconds     
       })
     }
