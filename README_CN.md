@@ -17,6 +17,128 @@
 
 </div>
 
+## 部署
+1. 修改.env.product 文件,仅需要修改如下行:
+   ```
+      #替换为你公司的id
+      NEXT_PUBLIC_AUTH_WECHAT_APP_ID="wxa31c5a6be71ee9b7"
+      #替换为你应用的密文
+      NEXT_PUBLIC_AUTH_WECHAT_APP_SECRET="DJd2sxEjxpQdqjcgi_Bit05Ex9Upx-ZJ7l3hqNTR5vo"
+      #替换为你公司应用的id
+      NEXT_PUBLIC_AUTH_WECHAT_AGENT_ID="5"
+      #替换为你公司应用的域名
+      NEXT_PUBLIC_AUTH_WECHAT_REDIRECT_URI="https://apexg1000.idea-group.cn"
+      #替换为你公司组织通讯录里面的显示名称,在这个清单里面的都是管理员,可以查看在线统计
+      NEXT_PUBLIC_Admin= ["camin","张晓刚",'Zxg']
+   ```
+2. 修改你企业微信的应用主页,的地址,记住手机和电脑端都设为一样的
+   ``` 
+   https://open.weixin.qq.com/connect/oauth2/authorize?appid=你的公司id&redirect_uri=https://你的应用域名/api/users/wecom&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect
+3. 在vercel 部署,设置openai  的 环境变量:OPENAI_API_KEY,多个key可以使用逗号分割
+   ```
+   sk-xxx,sk-yyy,sk-zzz
+
+4. mongodb简单使用
+   - vs code 安装 MongoDB for VS Code 插件
+   - 配置链接到华为云mongodb服务
+     ```
+      增加mongodb链接
+      mongodb://idea:QAZwsx123@124.71.215.126:21010/ideaChatGpt?authSource=admin
+   - 现在,你就可以在工具栏左侧看到mongodb的数据库了:ideaChatGpt
+     ```
+      数据结构 ,只有users表和requestlogs 两个表:
+      users:保存用户id,用户名,公司id等
+            {
+      "_id": {
+         "$oid": "6624ed9297779ba6f547ffe8"
+      },
+      "username": "zxg",
+      "__v": 0,
+      "alias_name": "Zxg",
+      "corpid": "wxa31c5a6be71ee9b7",
+      "email": "",
+      "loginTime": {
+         "$date": "2024-04-21T10:42:26.419Z"
+      },
+      "mobile": "",
+      "userCode": "jVvkpWECeMYCHUkz7uExyMBBF7nlU_Qu4hHTOJXs0-M"
+      }
+
+      requestlogs:保存用户提问时间戳
+      {
+      "_id": {
+         "$oid": "662502e498fa54a49486abdc"
+      },
+      "corpid": "wxa31c5a6be71ee9b7",
+      "username": "zxg",
+      "request_time": {
+         "$date": "2024-04-21T12:13:24.626Z"
+      },
+      "__v": 0
+       }
+      ```
+
+5. 查询最近一段时间的在线情况,返回用户名\最近一次提问时间\提问次数,如下脚本可以在vscode插件的playgrounds 中执行
+       
+    ```
+         use('ideaChatGpt');
+         db.requestlogs.aggregate([
+            {
+               $match: {
+                     corpid: 'wxa31c5a6be71ee9b7', // 添加corpid过滤条件
+                     request_time: {
+                        $gte: new Date(Date.now() - 60 * 60 *24* 1000) // 获取最近1小时的时间范围
+                     }
+               }
+            },
+            {
+               $lookup: {
+                     from: "users",
+                     localField: "username",
+                     foreignField: "username",
+                     as: "user"
+               }
+            },
+            {
+               $unwind: "$user"
+            },
+            {
+               $group: {
+                     _id: "$user.alias_name",
+                     count: { $sum: 1 },
+                     latest_request_timestamp: { $max: "$request_time" }
+               }
+            },
+            {
+               $addFields: {
+                     latest_request_time: {
+                        $dateToString: {
+                           format: "%Y-%m-%d %H:%M:%S",
+                           date: {
+                                 $toDate: "$latest_request_timestamp"
+                           },
+                           timezone: "Asia/Shanghai"
+                        }
+                     }
+               }
+            },
+            {
+               $sort: { count: -1,_id:1 } // 按照访问次数降序排列
+            },
+            {
+               $project: {
+                     _id: 0,
+                     alias_name: "$_id",
+                     count: 1,
+                     latest_request_time: 1
+               }
+            }
+         ])
+
+
+
+   
+
 ## 开始使用
 
 1. 准备好你的 [OpenAI API Key](https://platform.openai.com/account/api-keys);
