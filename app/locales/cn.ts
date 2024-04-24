@@ -8,7 +8,7 @@ const cn = {
   Error: {
     Unauthorized: isApp
       ? "检测到无效 API Key，请前往[设置](/#/settings)页检查 API Key 是否配置正确。"
-      : "访问受限，请刷新重试或者再次从企业微信进行合法授权。",
+      : "一个用户同时仅允许在一个终端上使用,请刷新此页面,重新授权此终端的使用.",
   },
   Auth: {
     Title: "需要密码",
