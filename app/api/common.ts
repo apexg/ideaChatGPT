@@ -41,6 +41,8 @@ export async function requestOpenai(req: NextRequest) {
     baseUrl = baseUrl.slice(0, -1);
   }
 
+  console.log("[authValue] ", authValue);
+  console.log("[authHeaderName] ", authHeaderName);
   console.log("[Proxy] ", path);
   console.log("[Base Url]", baseUrl);
 
