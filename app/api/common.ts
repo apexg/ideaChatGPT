@@ -82,7 +82,7 @@ export async function requestOpenai(req: NextRequest) {
     signal: controller.signal,
   };
   console.log("[fetchUrl] ", fetchUrl);
-  console.log("[fetchOptions]", fetchOptions); 
+  // console.log("[fetchOptions]", fetchOptions); 
   // #1815 try to refuse gpt4 request
   if (serverConfig.customModels && req.body) {
     try {
